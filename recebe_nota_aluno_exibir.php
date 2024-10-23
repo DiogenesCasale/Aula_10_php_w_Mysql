@@ -7,10 +7,13 @@ $senha = '';
 
 $conexao = new PDO("mysql:host=$servidor;dbname=$banco", $usuario, $senha);
 $codigoSQL =  "SELECT `valor`, `id_turma` FROM `notas` WHERE `id_aluno` = :id_alunos";
+$codigoSQL1 =  "SELECT `nome` FROM `turmas` WHERE `id` = :id_t";
 
     try {
         $comando = $conexao->prepare($codigoSQL);
         $resultado = $comando->execute(array('id_alunos' => $_GET['id_aluno']));
+
+        $comando1 = $conexao->prepare($codigoSQL1);
         
         if($resultado){
             ?>
@@ -21,10 +24,13 @@ $codigoSQL =  "SELECT `valor`, `id_turma` FROM `notas` WHERE `id_aluno` = :id_al
             </tr>
             <?php  
             while ($linha = $comando->fetch()) {
+            $id_turmae = $linha['id_turma'];
+            $resultado1 = $comando1->execute(array('id_t' => $id_turmae));
+            $linha1 = $comando1->fetch();
             ?>
                     <tr>
                         <td><?php echo $linha['valor']; ?></td>
-                        <td><?php echo $linha['id_turma']; ?></td>
+                        <td><?php echo $linha1['nome']; ?></td>
                     </tr>
        
         <?php
